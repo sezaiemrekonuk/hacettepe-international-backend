@@ -18,9 +18,12 @@ public class FileData {
     @Column(name="id")
     private int id;
 
+    @Column(name="name")
     private String name;
+
+    @Column(name="type")
     private String type;
 
-    @Column(name="filePath")
+    @Column(name="file_path")
     private String filePath;
 }

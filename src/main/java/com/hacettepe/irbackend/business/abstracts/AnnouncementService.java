@@ -11,6 +11,6 @@ public interface AnnouncementService {
     List<GetAllAnnouncementsResponse> getAll();
     void add(CreateAnnouncementRequest request);
     GetAnnouncementResponse getAnnouncementById(int id);
-    void update(UpdateAnnouncementRequest request);
+    String update(UpdateAnnouncementRequest request);
     void delete(int id);
 }

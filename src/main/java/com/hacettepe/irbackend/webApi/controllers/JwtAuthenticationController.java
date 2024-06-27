@@ -1,6 +1,7 @@
 package com.hacettepe.irbackend.webApi.controllers;
 
 import com.hacettepe.irbackend.business.requests.JwtRequest;
+import com.hacettepe.irbackend.business.requests.JwtValidationRequest;
 import com.hacettepe.irbackend.business.responses.JwtResponse;
 import com.hacettepe.irbackend.business.concretes.JwtUserDetailsManager;
 import com.hacettepe.irbackend.security.JwtTokenUtil;
@@ -45,6 +46,25 @@ public class JwtAuthenticationController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
+
+    @PostMapping("/validateToken")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> validateToken(@RequestBody JwtValidationRequest jwtRequest) {
+        logger.info("Received token validation request for user: {}", jwtRequest.getUsername());
+        final String token = jwtRequest.getToken();
+        final String username = jwtRequest.getUsername();
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        logger.info("Loaded user details for user: {}", username);
+        if (jwtTokenUtil.validateToken(token, userDetails)) {
+            logger.info("Token is valid for user: {}", username);
+            return ResponseEntity.ok().build();
+        } else {
+            logger.error("Token is not valid for user: {}", username);
+            return ResponseEntity.status(401).build();
+        }
+    }
+
+
 
 
     private void authenticate(String username, String password) throws Exception {

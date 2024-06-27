@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateAnnouncementRequest {
+    private int announcementId;
     private String title;
     private String content;
+    private String imagePath;
 }

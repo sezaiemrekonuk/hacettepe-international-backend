@@ -20,23 +20,26 @@ public class StorageManager implements StorageService {
 
     // current projects images directory
     private final String FILE_PATH = Paths.get("").toAbsolutePath() + "/src/main/resources/static/images/";
+    private final String STATIC_PATH = Paths.get("").toAbsolutePath() + "/src/main/resources/static/";
 
     @Override
     public String uploadImage(MultipartFile file) throws IOException {
         String filePath = FILE_PATH + file.getOriginalFilename();
-        FileData newFile = storageRepository.save(
-                FileData.builder()
-                        .name(file.getOriginalFilename())
-                        .filePath(filePath)
-                        .type(file.getContentType())
-                        .build()
-        );
+        String filePathFromStatic = filePath.split("static")[1];
 
-
+        if (storageRepository.findByFilePath(filePathFromStatic) == null) {
+            FileData newFile = storageRepository.save(
+                    FileData.builder()
+                            .name(file.getOriginalFilename())
+                            .filePath(filePathFromStatic)
+                            .type(file.getContentType())
+                            .build()
+            );
+        }
 
         if (file != null) {
             file.transferTo(Paths.get(filePath));
-            return filePath;
+            return filePathFromStatic;
         }
 
         return "Error occurred while uploading image";
@@ -45,7 +48,7 @@ public class StorageManager implements StorageService {
     @Override
     public void deleteImage(String imagePath) {
         try {
-            Files.deleteIfExists(Paths.get(imagePath));
+            Files.deleteIfExists(Paths.get(STATIC_PATH + imagePath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,5 +64,28 @@ public class StorageManager implements StorageService {
     @Override
     public List<FileData> getAllFilesWithType(String type) {
         return storageRepository.findAllByType(type);
+    }
+
+    @Override
+    public String uploadToGallery(MultipartFile file) throws IOException {
+        String filePath = FILE_PATH + "gallery/" +file.getOriginalFilename();
+        String filePathFromStatic = filePath.split("static")[1];
+
+        if (storageRepository.findByFilePath(filePathFromStatic) == null) {
+            FileData newFile = storageRepository.save(
+                    FileData.builder()
+                            .name(file.getOriginalFilename())
+                            .filePath(filePathFromStatic)
+                            .type("gallery"+file.getContentType())
+                            .build()
+            );
+        }
+
+        if (file != null) {
+            file.transferTo(Paths.get(filePath));
+            return filePathFromStatic;
+        }
+
+        return "Error occurred while uploading image";
     }
 }

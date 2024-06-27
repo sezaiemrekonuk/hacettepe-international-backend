@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -45,7 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                             auth
-                                    .requestMatchers("/api/v1/authenticate", "/api/v1/users/register").permitAll()
+                                    .requestMatchers("/api/v1/authenticate", "/api/v1/users/register", "/images/**").permitAll()
                                     .anyRequest().authenticated();
                             logger.info("Added /api/v1/authenticate and /api/v1/users/register to permitAll list.");
                         }
@@ -65,6 +67,27 @@ public class SecurityConfig {
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         logger.info("Added JwtRequestFilter before UsernamePasswordAuthenticationFilter.");
+
+        return httpSecurity.build();
+    }
+
+    // cors for port 3000
+    @Bean
+    public SecurityFilterChain securityFilterChainForCors(HttpSecurity httpSecurity) throws Exception {
+        logger.info("SecurityFilterChain is being created for cors.");
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> {
+                    cors.configurationSource(request -> {
+                        var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+                        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                        corsConfiguration.setAllowedHeaders(List.of("*"));
+                        return corsConfiguration;
+                    });
+                    logger.info("CorsConfiguration is set for http://localhost:3000.");
+                });
+
 
         return httpSecurity.build();
     }

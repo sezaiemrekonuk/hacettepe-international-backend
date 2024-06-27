@@ -11,4 +11,5 @@ public interface StorageService {
     void deleteImage(String imagePath);
     String getFilePath(String name);
     List<FileData> getAllFilesWithType(String type);
+    String uploadToGallery(MultipartFile file) throws IOException;
 }

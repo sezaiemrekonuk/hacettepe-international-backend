@@ -2,6 +2,7 @@ package com.hacettepe.irbackend.entities.concretes;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +27,11 @@ public class Announcement {
     private String content;
 
     @Column(name="date")
-    private Date date;
+    private Date date = new Date();
 
     @Column(name="author")
     private String author;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private FileData image;
+    @Column(name="imagePath")
+    private String imagePath;
 }

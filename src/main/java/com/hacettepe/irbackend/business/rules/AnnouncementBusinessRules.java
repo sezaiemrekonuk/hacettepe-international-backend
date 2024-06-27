@@ -10,7 +10,7 @@ public class AnnouncementBusinessRules {
     private AnnouncementRepository announcementRepository;
 
     public boolean isTitleValid(String title) {
-        return !title.isEmpty() && title.length() <= 100;
+        return !title.isEmpty() && title.length() <= 100 && !announcementRepository.existsByTitle(title);
     }
 
 }
