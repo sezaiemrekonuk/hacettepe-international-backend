@@ -18,7 +18,7 @@ import java.util.List;
 public class AnnouncementController {
     private AnnouncementService announcementService;
 
-    @GetMapping()
+    @GetMapping("/all")
     public List<GetAllAnnouncementsResponse> getAll(){
         return announcementService.getAll();
     }
@@ -29,7 +29,7 @@ public class AnnouncementController {
         announcementService.add(request);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GetAnnouncementResponse getAnnouncementById(@PathVariable int id){
         return announcementService.getAnnouncementById(id);

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                             auth
-                                    .requestMatchers("/api/v1/authenticate", "/api/v1/users/register", "/images/**").permitAll()
+                                    .requestMatchers("/api/v1/authenticate", "/api/v1/users/register", "/images/**", "/api/v1/authenticate/all", "/api/v1/announcements/get/").permitAll()
                                     .anyRequest().authenticated();
                             logger.info("Added /api/v1/authenticate and /api/v1/users/register to permitAll list.");
                         }

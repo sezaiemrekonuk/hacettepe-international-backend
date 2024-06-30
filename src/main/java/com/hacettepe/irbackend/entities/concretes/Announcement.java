@@ -32,6 +32,9 @@ public class Announcement {
     @Column(name="author")
     private String author;
 
+    @Column(name="language")
+    private String language;
+
     @Column(name="imagePath")
     private String imagePath;
 }
